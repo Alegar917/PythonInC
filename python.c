@@ -15,7 +15,7 @@ struct node{
         struct node *next;
 };
 
-
+/* insert a node */
 struct node* Insert(struct node *head){
         struct node *temp;
         struct node *prev=head;
@@ -45,7 +45,49 @@ struct node* Deleting(struct node *head){
         if(head==NULL){
                 return head;
         }
-        head=head->next;
+        head = NULL;
+        //head = head->next;
+}
+
+struct node* Reverse(struct node *head) {
+    struct node *temp = head;
+    struct node *reversing = NULL;
+    struct node *next= temp->next;
+
+    while(next != null) {
+        if(reversing == NULL) {
+            reversing = temp;
+            temp->next = null;
+        }
+        else{
+            temp->next = reversing;
+            reversing = temp;
+            //reversing = temp;
+        }
+        temp = next;
+        next = next->next;
+    }
+    return reversing;
+}
+
+struct node* Concat (struct node *head1, struct node *head2)
+{ 
+    struct node *temp1= head1;
+    while (temp1->next != null){
+        temp1 = temp -> next;
+    } 
+    //append the start of the head2 to the end of temp1
+    temp1.next = head2;
+}
+
+struct int Len( struct node *head)
+{
+    int size = 0;
+    while(head != null){
+        size++;
+        head= head-> next;
+    }
+    return size;
 }
 
 void Show(struct node *head){
