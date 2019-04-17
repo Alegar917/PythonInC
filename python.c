@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+// int asci (union *s);
 enum datatype{INT=1,FLOAT,STR};
 
 
@@ -17,6 +18,7 @@ union element{
         char s[100];
         union sub *a;
 };
+// int asci(struct node *s);
 
 struct node{
         enum datatype type;
@@ -52,45 +54,48 @@ struct node{
 // }
 /* insert a node */
 struct node* Insert(struct node *head){
-        struct node *temp;
-        struct node *prev=head;
-        int type;
-        temp=malloc(sizeof(struct node));
-        printf("Enter the type: ");
-        scanf("%d",&type);
-        if(type==1){
-                printf("Enter a Number: ");
-                scanf("%d",&temp->data.n);
-                temp->type=type;
-        }
-        if(type==2){
-            printf("Enter a decimal: ");
-            scanf("%f",&temp->data.f);
+    struct node *temp;
+    struct node *prev=head;
+    int type;
+    temp=malloc(sizeof(struct node));
+    printf("Enter the type: ");
+    scanf("%d",&type);
+    if(type==1){
+            printf("Enter a Number: ");
+            scanf("%d",&temp->data.n);
             temp->type=type;
+    }
+    if(type==2){
+        printf("Enter a decimal: ");
+        scanf("%f",&temp->data.f);
+        temp->type=type;
+    }
+    if(type==3){
+        printf("Enter a string: ");
+        scanf("%s",temp->data.s);
+        temp->type=type;
+    }
+    if(type==4){
+        //printf("would you like to create a sub-array within your linked list: ");
+        // temp->data.a=buildsub();
+        temp->type=type;
+    }
+    temp->next=NULL;
+    if (head==NULL){
+        head=temp;
+    }
+    else{
+        while(head->next!=NULL){
+            head=head->next;
         }
-        if(type==3){
-            printf("Enter a string: ");
-            scanf("%s",temp->data.s);
-            temp->type=type;
-        }
-        // if(type==4){
-        //     //printf("would you like to create a sub-array within your linked list: ");
-        //     temp->data.a=buildsub();
-        //     temp->type=type;
-        // }
-        temp->next=NULL;
-        if (head==NULL){
-                head=temp;
-        }
-        else{
-                while(head->next!=NULL){
-                        head=head->next;
-                }
-                head->next=temp;
-                head=prev;
-        }
+        head->next=temp;
+        head=prev;
+    }
+    return head;
 }
-struct node* Deleting(struct node *head){
+
+/* delete a node */
+void Deleting(struct node *head){
         if(head==NULL){
                 return head;
         }
@@ -115,7 +120,8 @@ struct node* Deleting(struct node *head){
 //     return reversing;
 // }
 
-struct node* Reverse(struct node* head) 
+/* reverse the list */
+void Reverse(struct node* head) 
 { 
     struct node* prev   = NULL; 
     struct node* temp = head; 
@@ -131,8 +137,8 @@ struct node* Reverse(struct node* head)
     head = prev; 
 } 
 
-
-struct node* Concat (struct node *head1, struct node *head2)
+/* concatenate two lists */
+void Concat (struct node *head1, struct node *head2)
 { 
     struct node *temp1= head1;
     while (temp1->next != NULL){
@@ -142,6 +148,7 @@ struct node* Concat (struct node *head1, struct node *head2)
     temp1->next = head2;
 }
 
+/* measure the length of the linked list */
 int Len( struct node *head)
 {
     int size = 0;
@@ -152,34 +159,108 @@ int Len( struct node *head)
     return size;
 }
 
-// union element Min (struct node *head)
+struct node* Min(struct node *head)
+{
+    struct node *temp = head;
+    struct node *min = NULL;
+    float minVal = 0; //comparator value of min node
+    while (temp != NULL){
+        if(min == NULL){
+            min = temp;
+            if(temp->type == 3)
+                minVal = asci(temp->data.s);
+            else if(temp->type == 2)
+                minVal = temp->data.f;
+            else if (temp->type == 1)
+                minVal = temp->data.n;
+
+        }
+        else if (temp->type == 3){
+            if (asci(temp)< minVal) {
+                min = temp;
+                minVal = asci(temp->data.s);
+            }
+        }
+        else if (temp->type == 2){
+            if(temp->data.f < minVal) {
+                min = temp;
+                minVal = temp->data.f;
+            }
+        } else {
+            if (temp->data.n < minVal) {
+                min = temp;
+                minVal = min->data.n;
+            }
+        }
+        temp = temp -> next;
+    }
+    return min;
+}
+
+// /* find the MAX */
+// union element Max (struct node *head)
 // {
 //     int size = 0;
+//     union max = NULL;
 //     node temp= head;
 //     if (head==NULL)
 //         return;
 //     while(temp != NULL){
-//         if(temp->type=3 && temp->next->type !=3 || temp->type!=3 && temp->next->type ==3)
+
+//         /* if the temp->type = 4 do nothing */
+
+
+//         /* if its a string */
+//         if (temp->type=3 && temp->next->type =3)
 //         {
-//             //
+//             if(asci(temp)>asci(temp->next)){
+//                 if(asci(temp> size))
+//                     size= asci(temp);
+//             }
 //         }
-//         else if (temp->type=3 && temp->next->type =3)
+//         /* If its either a decimal or integer just compare directly */
+//         else if(temp->data > temp->next->data && temp->data > size)
+//             size= temp->data;
+//         else if(temp->data < temp->next->data)
+//             size= temp->data;
+
+//         temp= temp->next;
+
+//     }
+// }
+// /* find the MIN */
+// union element Min (struct node *head)
+// {
+//     int size = 0;
+//     node temp= head;
+//     union min = NUll;
+//     if (head==NULL)
+//         return;
+//     while(temp != NULL){
+
+//         /* if the temp->type = 4 do nothing */
+
+//         /* if its a string */
+//         if (temp->type=3 && temp->next->type =3)
 //         {
 //             if(asci(temp)<asci(temp->next)){
 //                 if(asci(temp< size))
 //                     size= asci(temp);
 //             }
 //         }
+//         /* If its either a decimal or integer just compare directly */
 //         else if(temp->data < temp->next->data)
 //             size= temp->data;
 //         else if(temp->data > temp->next->data)
 //             size= temp->data;
 
+//         temp= temp->next;
+
 //     }
 
-
-
 // }
+
+/* display */
 void Show(struct node *head){
         if(head==NULL){
                 printf("The Queue is empty\n");
@@ -202,11 +283,11 @@ void Show(struct node *head){
                 printf("\n");
         }
 }
-int asci(char *s){
+int asci(struct node * s){
     int count=0;
-    for(int i=0; s[i]!='\0'; i++){
-        count+= s[i];
-        }
+    for(int i = 0; s->data.s[i] != '\0'; i++){
+        count+= s->data.s[i];
+    }
     return count;
 }
 int main(){
