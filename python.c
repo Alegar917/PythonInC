@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-// int asci (union *s);
 enum datatype{INT=1,FLOAT,STR};
 
 
@@ -18,13 +17,13 @@ union element{
         char s[100];
         union sub *a;
 };
-// int asci(struct node *s);
 
 struct node{
         enum datatype type;
         union element data;
         struct node *next;
 };
+int ascii(struct node *s );
 
 // void buildsub(){
 //     int n, type, i=0;
@@ -52,6 +51,7 @@ struct node{
 
 
 // }
+
 /* insert a node */
 struct node* Insert(struct node *head){
     struct node *temp;
@@ -95,12 +95,13 @@ struct node* Insert(struct node *head){
 }
 
 /* delete a node */
-void Deleting(struct node *head){
+struct node* Deleting(struct node *head){
         if(head==NULL){
                 return head;
         }
         head = NULL;
         //head = head->next;
+        return head;
 }
 
 // struct node* Reverse(struct node *head) {
@@ -159,6 +160,7 @@ int Len( struct node *head)
     return size;
 }
 
+/* find the MIN */
 struct node* Min(struct node *head)
 {
     struct node *temp = head;
@@ -167,29 +169,38 @@ struct node* Min(struct node *head)
     while (temp != NULL){
         if(min == NULL){
             min = temp;
-            if(temp->type == 3)
-                minVal = asci(temp->data.s);
-            else if(temp->type == 2)
+            if(temp->type == 3){
+                minVal = ascii(temp);
+                min->type=temp->type;
+            }
+            else if(temp->type == 2){
                 minVal = temp->data.f;
-            else if (temp->type == 1)
+                min->type=temp->type;
+            }
+            else if (temp->type == 1){
                 minVal = temp->data.n;
+                min->type=temp->type;
+            }
 
         }
         else if (temp->type == 3){
-            if (asci(temp)< minVal) {
+            if (ascii(temp)< minVal) {
                 min = temp;
-                minVal = asci(temp->data.s);
+                minVal = ascii(temp);
+                min->type=temp->type;
             }
         }
         else if (temp->type == 2){
             if(temp->data.f < minVal) {
                 min = temp;
                 minVal = temp->data.f;
+                min->type=temp->type;
             }
         } else {
             if (temp->data.n < minVal) {
                 min = temp;
                 minVal = min->data.n;
+                min->type=temp->type;
             }
         }
         temp = temp -> next;
@@ -197,68 +208,55 @@ struct node* Min(struct node *head)
     return min;
 }
 
-// /* find the MAX */
-// union element Max (struct node *head)
-// {
-//     int size = 0;
-//     union max = NULL;
-//     node temp= head;
-//     if (head==NULL)
-//         return;
-//     while(temp != NULL){
+/* find the MAX */
+struct node* Max (struct node *head)
+{
+ struct node *temp = head;
+    struct node *max = NULL;
+    float maxVal = 0; //comparator value of max node
+    while (temp != NULL){
+        if(max == NULL){
+            max = temp;
+            if(temp->type == 3){
+                maxVal = ascii(temp);
+                max->type=temp->type;
+            }
+            else if(temp->type == 2){
+                maxVal = temp->data.f;
+                max->type=temp->type;
+            }
+            else if (temp->type == 1){
+                maxVal = temp->data.n;
+                max->type=temp->type;
+            }
 
-//         /* if the temp->type = 4 do nothing */
-
-
-//         /* if its a string */
-//         if (temp->type=3 && temp->next->type =3)
-//         {
-//             if(asci(temp)>asci(temp->next)){
-//                 if(asci(temp> size))
-//                     size= asci(temp);
-//             }
-//         }
-//         /* If its either a decimal or integer just compare directly */
-//         else if(temp->data > temp->next->data && temp->data > size)
-//             size= temp->data;
-//         else if(temp->data < temp->next->data)
-//             size= temp->data;
-
-//         temp= temp->next;
-
-//     }
-// }
-// /* find the MIN */
-// union element Min (struct node *head)
-// {
-//     int size = 0;
-//     node temp= head;
-//     union min = NUll;
-//     if (head==NULL)
-//         return;
-//     while(temp != NULL){
-
-//         /* if the temp->type = 4 do nothing */
-
-//         /* if its a string */
-//         if (temp->type=3 && temp->next->type =3)
-//         {
-//             if(asci(temp)<asci(temp->next)){
-//                 if(asci(temp< size))
-//                     size= asci(temp);
-//             }
-//         }
-//         /* If its either a decimal or integer just compare directly */
-//         else if(temp->data < temp->next->data)
-//             size= temp->data;
-//         else if(temp->data > temp->next->data)
-//             size= temp->data;
-
-//         temp= temp->next;
-
-//     }
-
-// }
+        }
+        /* If temp is equal to a string convert it to ascii val*/
+        else if (temp->type == 3){
+            if (ascii(temp)> maxVal) {
+                max = temp;
+                maxVal = ascii(temp);
+                max->type=temp->type;
+            }
+        }
+        /* If temp is equal to a float or int compare it to current max*/
+        else if (temp->type == 2){
+            if(temp->data.f > maxVal) {
+                max = temp;
+                maxVal = temp->data.f;
+                max->type=temp->type;
+            }
+        } else {
+            if (temp->data.n > maxVal) {
+                max = temp;
+                maxVal = max->data.n;
+                max->type=temp->type;
+            }
+        }
+        temp = temp -> next;
+    }
+    return max;
+}
 
 /* display */
 void Show(struct node *head){
@@ -283,13 +281,20 @@ void Show(struct node *head){
                 printf("\n");
         }
 }
-int asci(struct node * s){
+
+int ascii(struct node *s){
     int count=0;
     for(int i = 0; s->data.s[i] != '\0'; i++){
         count+= s->data.s[i];
     }
     return count;
+    //     for(int i = 0; i < sizeof(s); i++){
+    //     count+= s[i];
+    // }
+    // return count;
+
 }
+
 int main(){
         int type;
         struct node *head=NULL;
@@ -311,6 +316,18 @@ int main(){
                         //Show(head);
                         printf("len:%d\n",Len(head));
                         //head=Reverse(head);
+                        struct node* thingy = Max(head); 
+                        if(thingy->type==1){
+                                printf("%d\n",thingy->data.n);
+                        }
+                        if(thingy->type==2){
+                                printf("%.2f\n",thingy->data.f);
+                        }
+                        if(thingy->type==3){
+                                printf("%s\n",thingy->data.s);
+                        }
+
+
                         Show(head);
                         break;
                 //case FLOAt: printf("Enter a real number");
