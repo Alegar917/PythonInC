@@ -1,0 +1,64 @@
+void ISort(struct node *head)
+{
+    int minVal,int minval1;
+    int n = len(head)
+    Struct node *hold=NULL;
+    struct node *temp=head->next; 
+    struct node *prev=head;
+
+    while(temp != NULL){
+        while(prev != NULL)
+        {
+            if(temp->type == 3){
+                minVal = ascii(temp);
+                if(prev->type == 3){
+                    minval1 = ascii(prev);
+                    if(minVal< minval1){
+                        hold->data=prev->data;
+                        hold->type=prev->type;
+
+                        prev->data=temp->data;
+                        prev->type=temp->type;
+
+                        temp->data=hold->data
+                        temp->type=hold->type;
+                    }
+                }
+                else{
+                    if(minVal< prev->data){
+                        hold->data=prev->data;
+                        hold->type=prev->type;
+
+                        prev->data=temp->data;
+                        prev->type=temp->type;
+
+                        temp->data=hold->data
+                        temp->type=hold->type;
+                    }
+                }
+            }
+
+            else{
+                if(temp->data < prev->data){
+                    hold->data=prev->data;
+                    hold->type=prev->type;
+
+                    prev->data=temp->data;
+                    prev->type=temp->type;
+
+                    temp->data=hold->data
+                    temp->type=hold->type;
+                }
+                // else{
+                //     hold->data=temp->data;
+                //     hold->type=temp->type;
+
+                //     temp->data=prev->data;
+                //     temp->type=prev->type;
+
+                //     prev->data=hold->data
+                //     prev->type=hold->type;
+                // }
+            }
+        }
+        temp = temp->next;
